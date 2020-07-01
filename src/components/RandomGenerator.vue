@@ -2,18 +2,31 @@
     <v-card>
         <v-card-text>
             <p class="text-h4">{{statement}}</p>
-            <p>Share: {{shareUrl}}</p>
         </v-card-text>
         <v-card-actions>
-            <v-btn color="success" @click="regenerate()">
-                Regenerate
-            </v-btn>
+            <v-container>
+                <v-row justify="center">
+                    <v-col>
+                        <v-btn color="success" @click="regenerate()" large>
+                            Regenerate
+                        </v-btn>
+                        <Keypress key-event="keyup" :key-code="32" @success="regenerate()"/>
+                    </v-col>
+                </v-row>
+                <v-row justify="center">
+                    <v-col align-self="center" class="col-12 col-md-5">
+                        <text-share :value="shareUrl" label="Link"/>
+                    </v-col>
+                </v-row>
+            </v-container>
         </v-card-actions>
     </v-card>
 </template>
 
 <script>
     import { nanoid } from 'nanoid';
+    import Keypress from 'vue-keypress';
+    import TextShare from './TextShare';
     const seed = require('seed-random');
 
     function randomElement(arr, random)
@@ -23,6 +36,7 @@
 
     export default {
         name: 'RandomGenerator',
+        components: {TextShare, Keypress},
         data: () => ({
             statement: 'Bla bla bla',
             seedStr: ''
