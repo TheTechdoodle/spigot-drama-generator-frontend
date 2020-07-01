@@ -14,7 +14,7 @@
         </v-app-bar>
 
         <v-main>
-            <v-container>
+            <v-container v-if="hasData">
                 <v-row class="text-center">
                     <v-col cols="12">
                         <random-generator/>
@@ -34,6 +34,9 @@
                     </v-col>
                 </v-row>
             </v-container>
+            <v-container v-else>
+                <v-alert color="error">Could not get data!</v-alert>
+            </v-container>
         </v-main>
     </v-app>
 </template>
@@ -44,14 +47,15 @@
 
     export default {
         name: 'App',
-
         components: {
             RandomGenerator,
             DarkSwitch
         },
-
-        data: () => ({
-            //
-        })
+        computed: {
+            hasData()
+            {
+                return this.$dramaData !== null;
+            }
+        }
     };
 </script>
