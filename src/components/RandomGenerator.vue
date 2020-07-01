@@ -2,9 +2,10 @@
     <v-card>
         <v-card-text>
             <p class="text-h4">{{statement}}</p>
+            <p>Share: {{shareUrl}}</p>
         </v-card-text>
         <v-card-actions>
-            <v-btn color="success" @click="regenerate">
+            <v-btn color="success" @click="regenerate()">
                 Regenerate
             </v-btn>
         </v-card-actions>
@@ -29,11 +30,11 @@
         methods: {
             regenerate(seedStr)
             {
-                this.seedStr = seedStr || nanoid();
+                this.seedStr = seedStr || nanoid(5);
                 const random = seed(this.seedStr);
 
                 let sentence = randomElement(this.$dramaData.sentences, random);
-                for(let match of sentence.match(/\[(.+?)]/g))
+                for(let match of sentence.match(/\[.+?]/g))
                 {
                     let prop = match.slice(1, -1);
                     if(this.$dramaData.combinations.hasOwnProperty(prop))
@@ -44,9 +45,17 @@
                 this.statement = sentence;
             }
         },
+        computed: {
+            shareUrl()
+            {
+                let url = new URL(window.location);
+                url.hash = this.seedStr;
+                return url.toString();
+            }
+        },
         created()
         {
-            this.regenerate();
+            this.regenerate(window.location.hash.replace('#', ''));
         }
     };
 </script>
