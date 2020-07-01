@@ -8,6 +8,8 @@
   },
   "dependencies": {
     "localforage": "^1.7.4",
+    "nanoid": "^3.1.10",
+    "seed-random": "^2.2.0",
     "vue": "^2.6.11",
     "vuetify": "^2.2.11"
   },

@@ -9,21 +9,27 @@
         </v-app-bar>
 
         <v-main>
-            <HelloWorld/>
+            <v-container>
+                <v-row class="text-center">
+                    <v-col cols="12">
+                        <random-generator/>
+                    </v-col>
+                </v-row>
+            </v-container>
         </v-main>
     </v-app>
 </template>
 
 <script>
-    import HelloWorld from './components/HelloWorld';
     import DarkSwitch from './components/DarkSwitch';
+    import RandomGenerator from './components/RandomGenerator';
 
     export default {
         name: 'App',
 
         components: {
-            DarkSwitch,
-            HelloWorld
+            RandomGenerator,
+            DarkSwitch
         },
 
         data: () => ({
