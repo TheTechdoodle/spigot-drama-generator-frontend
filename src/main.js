@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import App from './App.vue';
 import loadData from './dataLoader';
+import vuetify from './plugins/vuetify';
 
 Vue.config.productionTip = false;
 
@@ -15,6 +16,8 @@ Vue.config.productionTip = false;
     Vue.prototype.$dramaData = dramaData;
     
     new Vue({
+        vuetify,
+
         render: function(h)
         {
             return h(App);
