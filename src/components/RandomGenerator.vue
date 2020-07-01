@@ -10,12 +10,35 @@
                         <v-btn color="success" @click="regenerate()" large>
                             Regenerate
                         </v-btn>
+                        <p class="text-caption font-weight-light">or press space</p>
                         <Keypress key-event="keyup" :key-code="32" @success="regenerate()"/>
                     </v-col>
                 </v-row>
                 <v-row justify="center">
-                    <v-col align-self="center" class="col-12 col-md-5">
+                    <v-col class="col-12 col-md-5">
                         <text-share :value="shareUrl" label="Link"/>
+                    </v-col>
+                </v-row>
+                <v-row justify="center">
+                    <v-col class="col-12 col-md-7">
+                        <v-expansion-panels>
+                            <v-expansion-panel>
+                                <v-expansion-panel-header>History</v-expansion-panel-header>
+                                <v-expansion-panel-content>
+                                    <v-btn v-if="history.length > 0" color="error" @click="clearHistory" class="mb-3">
+                                        Clear History
+                                    </v-btn>
+                                    <v-list-item-group>
+                                        <v-list-item v-for="element of history" :key="element.seed" @click="regenerate(element.seed)">
+                                            <v-list-item-content>{{element.statement}}</v-list-item-content>
+                                            <v-list-item-icon>
+                                                <v-icon>mdi-backup-restore</v-icon>
+                                            </v-list-item-icon>
+                                        </v-list-item>
+                                    </v-list-item-group>
+                                </v-expansion-panel-content>
+                            </v-expansion-panel>
+                        </v-expansion-panels>
                     </v-col>
                 </v-row>
             </v-container>
@@ -28,6 +51,7 @@
     import Keypress from 'vue-keypress';
     import TextShare from './TextShare';
     const seed = require('seed-random');
+    import localforage from 'localforage';
 
     function randomElement(arr, random)
     {
@@ -38,8 +62,9 @@
         name: 'RandomGenerator',
         components: {TextShare, Keypress},
         data: () => ({
-            statement: 'Bla bla bla',
-            seedStr: ''
+            statement: '',
+            seedStr: '',
+            history: []
         }),
         methods: {
             regenerate(seedStr)
@@ -57,6 +82,20 @@
                     }
                 }
                 this.statement = sentence;
+                if(!seedStr)
+                {
+                    this.history.unshift({statement: sentence, seed: this.seedStr});
+                    if(this.history.length > 100)
+                    {
+                        this.history.pop();
+                    }
+                    localforage.setItem('history', this.history);
+                }
+            },
+            clearHistory()
+            {
+                this.history = [];
+                localforage.setItem('history', []);
             }
         },
         computed: {
@@ -69,7 +108,11 @@
         },
         created()
         {
-            this.regenerate(window.location.hash.replace('#', ''));
+            localforage.getItem('history').then((historyData) =>
+            {
+                this.history = historyData || [];
+                this.regenerate(window.location.hash.replace('#', ''));
+            });
         }
     };
 </script>
