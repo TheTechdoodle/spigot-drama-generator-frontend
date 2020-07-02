@@ -16,7 +16,7 @@
                 </v-row>
                 <v-row justify="center">
                     <v-col class="col-12 col-md-5">
-                        <text-share :value="shareUrl" label="Link"/>
+                        <text-share :description="statement" :value="shareUrl" label="Link"/>
                     </v-col>
                 </v-row>
                 <v-row justify="center">

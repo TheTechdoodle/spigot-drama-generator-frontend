@@ -16,7 +16,8 @@
         name: 'TextShare',
         props: {
             value: String,
-            label: String
+            label: String,
+            description: String
         },
         data: () => ({
             copyColor: ''
@@ -30,7 +31,7 @@
         methods: {
             copy()
             {
-                window.navigator.clipboard.writeText(this.value).then(() =>
+                window.navigator.clipboard.writeText(this.description + ' - ' + this.value).then(() =>
                 {
                     this.copyColor = 'success';
                 });
@@ -38,7 +39,8 @@
             share()
             {
                 window.navigator.share({
-                    url: this.value
+                    url: this.value,
+                    text: this.description
                 });
             }
         },
