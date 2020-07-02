@@ -13,7 +13,7 @@ Vue.use(Vuetify);
 
 (async() =>
 {
-    const theme = await localforage.getItem('theme');
+    let theme = await localforage.getItem('theme');
     let dramaData = null;
     try
     {
@@ -23,6 +23,11 @@ Vue.use(Vuetify);
     {
     }
     Vue.prototype.$dramaData = dramaData;
+    
+    if(!theme)
+    {
+        theme = (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light';
+    }
     
     new Vue({
         vuetify: new Vuetify({
