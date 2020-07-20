@@ -47,7 +47,7 @@
         computed: {
             canShare()
             {
-                return window.navigator.hasOwnProperty('share');
+                return !!window.navigator.share;
             }
         }
     };
